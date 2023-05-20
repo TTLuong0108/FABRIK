@@ -10,7 +10,7 @@ if __name__ == "__main__":
     LoF = 10 # Length of Freedom
     Joint = FABFcn.InitRobotNPoint(NumberOfPoint=DoF,LengthEachLink=LoF,ThetaInit=InitTheta)
     FABFcn.Draw(Joint=Joint)
-    NewJoint = FABFcn.FabRik(NumberOfPoint=DoF,Point=Joint,TargetPoint=[5,1,0])
+    NewJoint = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=[5,1,0])
     print(Joint[:,1])
     pass
 

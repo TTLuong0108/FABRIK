@@ -8,7 +8,8 @@ def Draw(Joint):
     x_data=Joint[:,0]
     y_data=Joint[:,1]
     z_data=Joint[:,2]
-    ax.plot(x_data,y_data,z_data,"x")
+    ax.plot(x_data,y_data,z_data)
+    ax.plot(x_data,y_data,z_data,"ro")
     plt.show()
     pass
 
