@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from FABmath import cosd, sind, acosd, asind, math
 
-def Draw(Joint):
+def Draw(Joint,xlim,ylim):
     ax = plt.axes(projection='3d')
+    ax.set_xlim([xlim[0],xlim[1]])
+    ax.set_ylim([ylim[0],ylim[1]])
     x_data=Joint[:,0]
     y_data=Joint[:,1]
     z_data=Joint[:,2]
@@ -55,7 +57,7 @@ def Distance(PositionA,PositionB):
     zb = PositionB[2]
     return math.sqrt((xb-xa)**2 + (yb-ya)**2 + (zb-za)**2)
 
-def FabRik(NumberOfPoint,Point,TargetPoint):
+def FABRIK(NumberOfPoint,Point,TargetPoint):
     DoF = NumberOfPoint + 1
     P = Point
     t = TargetPoint
@@ -74,8 +76,33 @@ def FabRik(NumberOfPoint,Point,TargetPoint):
             r[i,0] = Distance(t,P[i,:])
             lamda[i,0] = d[i,0]/r[i,0]
             P[i+1,:] = (1-lamda[i,0])*P[i,:] + lamda[i,0]*t
-    pass
+    else:
+        b = P[1,:]
+        difA = Distance(P[DoF,:],t)
+        while difA > tol:
+            #*******************************
+            #***** [STATE 1: FORWARD] ******
+            #*******************************
+            P[DoF,:] = t
+            for i in range(DoF-1,0,-1): # DoF-1 -> 1
+                r[i,0] = Distance(P[i+1,:],P[i,:])
+                lamda[i,0] = d[i,0]/r[i,0]
+                P[i,:] = (1-lamda[i,0])*P[i+1,:] + lamda[i,0]*P[i,:]
+            #*******************************
+            #***** [STATE 2: BACKWARD] ******
+            #*******************************
+            P[1,:] = b
+            for i in range(1,DoF): # 1 -> DoF-1
+                r[i,0] = Distance(P[i+1,:],P[i,:])
+                lamda[i,0] = d[i,0]/r[i,0]
+                P[i+1,:] = (1-lamda[i,0])*P[i,:] + lamda[i,0]*P[i+1,:]     
+            difA = Distance(P[DoF,:],t) 
+        P[0,:] = P[1,:]      
+    return P
+    
 if __name__ == "__main__":
-    d = Distance([0,0,0],[0,1,0])
-    Draw()
-    print(d)
+    # d = Distance([0,0,0],[0,1,0])
+    # Draw()
+    # print(d)
+    for i in range(5,1,-1):
+        print(i)
