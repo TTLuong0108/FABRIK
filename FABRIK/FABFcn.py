@@ -65,7 +65,7 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
     d_sum = 0
     lamda = np.zeros((DoF+2,1))
     r = np.zeros((DoF+2,1))
-    Angle = np.zeros((DoF+2,1))
+    Angle = np.zeros((DoF,1))
     tol = 0.1
 
     for i in range(1,DoF): # 1 to DoF-1
@@ -78,7 +78,7 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
             lamda[i,0] = d[i,0]/r[i,0]
             P[i+1,:] = (1-lamda[i,0])*P[i,:] + lamda[i,0]*t
     else:
-        b = P[1,:]
+        #b = P[1,:]
         difA = Distance(P[DoF,:],t)
         while difA > tol:
             #*******************************
@@ -89,19 +89,25 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
                 r[i,0] = Distance(P[i+1,:],P[i,:])
                 lamda[i,0] = d[i,0]/r[i,0]
                 P[i,:] = (1-lamda[i,0])*P[i+1,:] + lamda[i,0]*P[i,:]
+                P[i,0] = round(P[i,0],3)
+                P[i,1] = round(P[i,1],3)
+                P[i,2] = round(P[i,2],3)
             #*******************************
             #***** [STATE 2: BACKWARD] ******
             #*******************************
-            P[1,:] = b
+            P[1,:] = [0,0,0]
             for i in range(1,DoF): # 1 -> DoF-1
                 r[i,0] = Distance(P[i+1,:],P[i,:])
                 lamda[i,0] = d[i,0]/r[i,0]
                 P[i+1,:] = (1-lamda[i,0])*P[i,:] + lamda[i,0]*P[i+1,:]  
+                P[i,0] = round(P[i,0],3)
+                P[i,1] = round(P[i,1],3)
+                P[i,2] = round(P[i,2],3)
                 if i <= DoF-2 and i>1:
                     Angle[i] = JointAngle(P[i,:],P[i+1,:],P[i+2,:])
             difA = Distance(P[DoF,:],t) 
         P[0,:] = P[1,:]
-        Angle[1] = JointAngle([-1,0,0],[0,0,0],P[1,:])
+        Angle[1] = JointAngle([-10,0,0],P[1,:],P[2,:])
         Angle[0] = Angle[1]
     return P,Angle
     

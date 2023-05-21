@@ -11,7 +11,8 @@ if __name__ == "__main__":
     Joint = FABFcn.InitRobotNPoint(NumberOfPoint=DoF,LengthEachLink=LoF,ThetaInit=InitTheta)
     NewJoint,Angle = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=[25,10,10])
     #print(FABFcn.Distance(NewJoint[0,:],NewJoint[1,:]))
-    print(Angle)
+    #print(NewJoint)
     FABFcn.Draw(Joint=NewJoint,xlim=[0,40],ylim=[0,40])
+    print(FABFcn.JointAngle(NewJoint[1,:],NewJoint[2,:],NewJoint[3,:]))
     pass
 
