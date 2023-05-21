@@ -9,9 +9,9 @@ if __name__ == "__main__":
     InitTheta[1,0] = 90 # t1 = 90
     LoF = 10 # Length of Freedom
     Joint = FABFcn.InitRobotNPoint(NumberOfPoint=DoF,LengthEachLink=LoF,ThetaInit=InitTheta)
-    NewJoint = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=[25,10,10])
+    NewJoint,Angle = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=[25,10,10])
     #print(FABFcn.Distance(NewJoint[0,:],NewJoint[1,:]))
-    #print(NewJoint)
+    print(Angle)
     FABFcn.Draw(Joint=NewJoint,xlim=[0,40],ylim=[0,40])
     pass
 
