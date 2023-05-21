@@ -8,11 +8,14 @@ if __name__ == "__main__":
     InitTheta = np.zeros((DoF+2,1)) # t1 will start at [1,0] element
     InitTheta[1,0] = 90 # t1 = 90
     LoF = 10 # Length of Freedom
+    TargetPoint = [25,10,10]
+    TargetPoint = [40,0,0]
+
     Joint = FABFcn.InitRobotNPoint(NumberOfPoint=DoF,LengthEachLink=LoF,ThetaInit=InitTheta)
-    NewJoint,Angle = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=[25,10,10])
-    #print(FABFcn.Distance(NewJoint[0,:],NewJoint[1,:]))
-    #print(NewJoint)
-    FABFcn.Draw(Joint=NewJoint,xlim=[0,40],ylim=[0,40])
-    print(FABFcn.JointAngle(NewJoint[1,:],NewJoint[2,:],NewJoint[3,:]))
+    NewJoint,Angle = FABFcn.FABRIK(NumberOfPoint=DoF,Point=Joint,TargetPoint=TargetPoint)
+
+    FABFcn.Draw(Joint=NewJoint,TargetPoint=TargetPoint,xlim=[-10,40],ylim=[-10,40],zlim=[0,30])
+    print(Angle)
+    #print(FABFcn.JointAngle(NewJoint[1,:],NewJoint[2,:],NewJoint[3,:]))
     pass
 

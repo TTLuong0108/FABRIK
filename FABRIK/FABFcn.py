@@ -3,15 +3,17 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from FABmath import cosd, sind, acosd, asind, math, JointAngle
 
-def Draw(Joint,xlim,ylim):
+def Draw(Joint,TargetPoint,xlim,ylim,zlim):
     ax = plt.axes(projection='3d')
     ax.set_xlim([xlim[0],xlim[1]])
     ax.set_ylim([ylim[0],ylim[1]])
+    ax.set_zlim([zlim[0],zlim[1]])
     x_data=Joint[:,0]
     y_data=Joint[:,1]
     z_data=Joint[:,2]
     ax.plot(x_data,y_data,z_data)
     ax.plot(x_data,y_data,z_data,"ro")
+    ax.plot(TargetPoint[0],TargetPoint[1],TargetPoint[2],"bX")
     plt.show()
     pass
 
@@ -66,7 +68,7 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
     lamda = np.zeros((DoF+2,1))
     r = np.zeros((DoF+2,1))
     Angle = np.zeros((DoF,1))
-    tol = 0.1
+    tol = 0.05
 
     for i in range(1,DoF): # 1 to DoF-1
         d[i,0] = Distance(P[i+1,:],P[i,:])
@@ -103,12 +105,12 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
                 P[i,0] = round(P[i,0],3)
                 P[i,1] = round(P[i,1],3)
                 P[i,2] = round(P[i,2],3)
-                if i <= DoF-2 and i>1:
+                if i <= DoF-2 and i>=1:
                     Angle[i] = JointAngle(P[i,:],P[i+1,:],P[i+2,:])
             difA = Distance(P[DoF,:],t) 
         P[0,:] = P[1,:]
-        Angle[1] = JointAngle([-10,0,0],P[1,:],P[2,:])
-        Angle[0] = Angle[1]
+        Angle[0] = JointAngle([-10,0,0],P[1,:],P[2,:])
+
     return P,Angle
     
 if __name__ == "__main__":

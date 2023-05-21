@@ -28,12 +28,18 @@ def JointAngle(A,B,C):
     zC = C[2]
     angle_BAC = 0
     angle_BCA = 0
+    Vector_AB = B-A
+    Vector_BC = C-B
+
     AB = math.sqrt( (xA-xB)**2 + (yA-yB)**2 + (zA-zB)**2 )
     BC = math.sqrt( (xB-xC)**2 + (yB-yC)**2 + (zB-zC)**2 )
     AC = math.sqrt( (xA-xC)**2 + (yA-yC)**2 + (zA-zC)**2 )
     angle_BAC = acosd((AB**2+AC**2-BC**2)/(2*AB*AC))
     angle_BCA = acosd((BC**2+AC**2-AB**2)/(2*BC*AC))
-    return angle_BAC + angle_BCA
+
+    Z = -(Vector_AB[2]/AB)*(Vector_BC[0]/BC) + (Vector_AB[0]/AB)*(Vector_BC[2]/BC)
+    Z = np.sign(Z)
+    return Z*(angle_BAC + angle_BCA)
 
 if __name__ == "__main__":
     A = [0,0,0]
