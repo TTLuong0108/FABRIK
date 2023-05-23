@@ -67,7 +67,7 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
     d_sum = 0
     lamda = np.zeros((DoF+2,1))
     r = np.zeros((DoF+2,1))
-    Angle = np.zeros((DoF,1))
+    Angle = np.zeros((DoF,2))
     tol = 0.05
 
     for i in range(1,DoF): # 1 to DoF-1
@@ -106,10 +106,12 @@ def FABRIK(NumberOfPoint,Point,TargetPoint):
                 P[i,1] = round(P[i,1],3)
                 P[i,2] = round(P[i,2],3)
                 if i <= DoF-2 and i>=1:
-                    Angle[i] = JointAngle(P[i,:],P[i+1,:],P[i+2,:])
+                    Angle[i,0] = JointAngle(P[i,:],P[i+1,:],P[i+2,:],demension="OXZ")
+                    Angle[i,1] = JointAngle(P[i,:],P[i+1,:],P[i+2,:],demension="OXY")
             difA = Distance(P[DoF,:],t) 
         P[0,:] = P[1,:]
-        Angle[0] = JointAngle([-10,0,0],P[1,:],P[2,:])
+        Angle[0,0] = JointAngle([-10,0,0],P[1,:],P[2,:],demension="OXZ")
+        Angle[0,1] = JointAngle([-10,0,0],P[1,:],P[2,:],demension="OXY")
 
     return P,Angle
     
@@ -117,5 +119,4 @@ if __name__ == "__main__":
     # d = Distance([0,0,0],[0,1,0])
     # Draw()
     # print(d)
-    for i in range(5,1,-1):
-        print(i)
+    print(JointAngle([-10,0,0]))
